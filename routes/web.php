@@ -1,7 +1,10 @@
 <?php
 
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Spatie\Multitenancy\Models\Tenant;
 
 Route::get('/', function () {
-    return view('welcome');
+    dd(User::first());
 });
