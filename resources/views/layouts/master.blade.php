@@ -22,6 +22,7 @@
 			@include('layouts.main-header')			
 			<!-- container -->
 			<div class="container-fluid">
+                <x-alert />
 				@yield('page-header')
 				@yield('content')
 				@include('layouts.sidebar')
