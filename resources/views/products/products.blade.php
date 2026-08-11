@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    الاقسام
+    المنتجات
 @endsection
 @section('css')
     <!-- Internal Data table css -->
@@ -16,12 +16,12 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">الاقسام</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                <h4 class="content-title mb-0 my-auto">المنتجات</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
                     الاعدادات</span>
             </div>
         </div>
         <div class="d-flex my-xl-auto right-content">
-            <a class="btn ripple btn-primary" data-target="#create_section" data-toggle="modal" href="">اضافة قسم <i
+            <a class="btn ripple btn-primary" data-target="#create_product" data-toggle="modal" href="">اضافة منتج <i
                     class="fa fa-plus" aria-hidden="true"></i></a>
         </div>
     </div>
@@ -34,7 +34,7 @@
             <div class="card">
                 <div class="card-header pb-0">
                     <div class="d-flex justify-content-between">
-                        <h4 class="card-title mg-b-0">قائمة الاقسام</h4>
+                        <h4 class="card-title mg-b-0">قائمة المنتجات</h4>
                         <i class="mdi mdi-dots-horizontal text-gray"></i>
                     </div>
                 </div>
@@ -44,27 +44,29 @@
                             <thead>
                                 <tr>
                                     <th class="wd-15p border-bottom-0">#</th>
+                                    <th class="wd-15p border-bottom-0">اسم المنتج</th>
                                     <th class="wd-15p border-bottom-0">اسم القسم</th>
                                     <th class="wd-15p border-bottom-0">الوصف</th>
                                     <th class="wd-15p border-bottom-0">الإجراءات</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($sections as $section)
+                                @forelse ($products as $product)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $section->section_name }}</td>
-                                        <td>{{ $section->description }}</td>
+                                        <td>{{ $product->product_name }}</td>
+                                        <td>{{ $product->section->section_name }}</td>
+                                        <td>{{ $product->description }}</td>
                                         <td>
-                                            <a class="btn btn-sm btn-outline-info" href="#"
-                                                data-target="#edit_section" data-toggle="modal"
-                                                data-id="{{ $section->id }}"
-                                                data-section_name="{{ $section->section_name }}"
-                                                data-description="{{ $section->description }}" title="تعديل"><i
+                                            <a class="btn btn-sm btn-outline-info" href="#" data-target="#edit_product"
+                                                data-toggle="modal" data-id="{{ $product->id }}"
+                                                data-product_name="{{ $product->product_name }}"
+                                                data-description="{{ $product->description }}"
+                                                data-section_id="{{ $product->section_id }}" title="تعديل"><i
                                                     class="fa fa-edit"></i></a>
-                                            <x-delete-confirm action="{{ route('sections.destroy', $section->id) }}"
-                                                title="تأكيد حذف القسم"
-                                                message="هل أنت متأكد من رغبتك في حذف القسم '{{ $section->section_name }}'؟">
+                                            <x-delete-confirm action="{{ route('products.destroy', $product->id) }}"
+                                                title="تأكيد حذف المنتج"
+                                                message="هل أنت متأكد من رغبتك في حذف المنتج '{{ $product->product_name }}'؟">
                                                 <button class="btn btn-sm btn-outline-danger" title="حذف"><i
                                                         class="fa fa-trash"></i></button>
                                             </x-delete-confirm>
@@ -72,7 +74,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center">لا توجد أقسام مسجلة.</td>
+                                        <td colspan="5" class="text-center">لا توجد منتجات مسجلة.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -81,10 +83,10 @@
                 </div>
             </div>
         </div>
-        {{-- Create Section Modal --}}
-        @include('sections.create-section')
-        {{-- Edit Section Modal --}}
-        @include('sections.edit-section')
+        {{-- Create Product Modal --}}
+        @include('products.create-product')
+        {{-- Edit Product Modal --}}
+        @include('products.edit-product')
     </div>
     <!-- row closed -->
     </div>
@@ -113,16 +115,18 @@
     <!--Internal  Datatable js -->
     <script src="{{ URL::asset('assets/js/table-data.js') }}"></script>
     <script>
-        $('#edit_section').on('show.bs.modal', function(event) {
+        $('#edit_product').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var id = button.data('id');
-            var section_name = button.data('section_name');
+            var section_id = button.data('section_id');
+            var product_name = button.data('product_name');
             var description = button.data('description');
 
             var modal = $(this);
-            modal.find('.modal-body #edit_section_name').val(section_name);
+            modal.find('.modal-body #edit_product_name').val(product_name);
             modal.find('.modal-body #edit_description').val(description);
-            modal.find('#edit_section_form').attr('action', '{{ url('sections') }}/' + id);
+            modal.find('.modal-body #section_id').val(section_id);
+            modal.find('#edit_product_form').attr('action', '{{ url('products') }}/' + id);
         });
     </script>
 @endsection
