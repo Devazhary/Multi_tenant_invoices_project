@@ -19,4 +19,5 @@ class InvoicesDetails extends Model
         'note',
         'user',
     ];
+
 }

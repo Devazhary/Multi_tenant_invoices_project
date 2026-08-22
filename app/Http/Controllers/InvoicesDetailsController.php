@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\invoice;
+use App\Models\InvoiceAttachments;
 use App\Models\InvoicesDetails;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class InvoicesDetailsController extends Controller
 {
@@ -12,7 +15,7 @@ class InvoicesDetailsController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -34,9 +37,13 @@ class InvoicesDetailsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(InvoicesDetails $invoicesDetails)
+    public function show(string $id)
     {
-        //
+        $invoice = invoice::findOrFail($id);
+        $invoiceDetails = InvoicesDetails::where('invoice_id', $id)->get();
+        $invoiceAttachments = InvoiceAttachments::where('invoice_id', $id)->get();
+
+        return view('invoices.invoice-details', compact('invoice', 'invoiceDetails', 'invoiceAttachments'));
     }
 
     /**
@@ -61,5 +68,29 @@ class InvoicesDetailsController extends Controller
     public function destroy(InvoicesDetails $invoicesDetails)
     {
         //
+    }
+
+    public function showInvoiceAttachment(string $id)
+    {
+        $attachment = InvoiceAttachments::findOrFail($id);
+        $filePath = storage_path('app/public/uploads/' . $attachment->invoice_number . '/' . $attachment->file_name);
+
+        if (file_exists($filePath)) {
+            return response()->file($filePath);
+        } else {
+            return redirect()->back()->with('error', 'File not found.');
+        }
+    }
+
+    public function downloadInvoiceAttachment(string $id)
+    {
+        $attachment = InvoiceAttachments::findOrFail($id);
+        $filePath = storage_path('app/public/uploads/' . $attachment->invoice_number . '/' . $attachment->file_name);
+
+        if (file_exists($filePath)) {
+            return response()->download($filePath);
+        } else {
+            return redirect()->back()->with('error', 'File not found.');
+        }
     }
 }

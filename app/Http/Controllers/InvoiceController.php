@@ -18,7 +18,8 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        return view('invoices.invoices');
+        $invoices = invoice::with('section')->get();
+        return view('invoices.invoices', compact('invoices'));
     }
 
     /**
@@ -65,7 +66,7 @@ class InvoiceController extends Controller
                 $file = $request->file('pic');
                 $extension = $file->getClientOriginalExtension();
                 $newFilename = Str::uuid() . '.' . $extension;
-                $path = $file->storeAs('uploads', $newFilename, 'public');
+                $path = $file->storeAs('uploads/' . $invoice->invoice_number, $newFilename, 'public');
 
                 InvoiceAttachments::create([
                     'file_name' => $newFilename,
@@ -96,17 +97,40 @@ class InvoiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(invoice $invoice)
+    public function edit($id)
     {
-        //
+        $invoice = invoice::where('id', $id)->first();
+        $sections = Section::all();
+        return view('invoices.edit-invoice', compact('sections', 'invoice'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, invoice $invoice)
+    public function update(InvoiceRequest $request, invoice $invoice)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            $validatedData = $request->validated();
+            
+            $invoice->update($validatedData);
+
+            // Update invoice details if product or section changed
+            $sectionName = Section::where('id', $request->section_id)->value('section_name');
+            InvoicesDetails::where('invoice_id', $invoice->id)->update([
+                'product' => $request->product,
+                'section' => $sectionName,
+                'note' => $request->note,
+            ]);
+
+            DB::commit();
+            return redirect()->back()->with('edit', 'تم تعديل الفاتورة بنجاح');
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     /**

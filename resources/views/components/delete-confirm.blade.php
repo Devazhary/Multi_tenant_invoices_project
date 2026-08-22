@@ -54,3 +54,13 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Move modal to body to prevent layout shifting/flickering when inside a table-responsive
+        var modal = document.getElementById('{{ $modalId }}');
+        if (modal && modal.parentNode !== document.body) {
+            document.body.appendChild(modal);
+        }
+    });
+</script>

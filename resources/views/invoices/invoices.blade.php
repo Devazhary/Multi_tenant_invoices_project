@@ -10,6 +10,47 @@
     <link href="{{ URL::asset('assets/plugins/datatable/css/jquery.dataTables.min.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('assets/plugins/datatable/css/responsive.dataTables.min.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
+    <style>
+        .btn-modern-dropdown {
+            background-color: transparent;
+            color: #6c757d;
+            border: none;
+            border-radius: 8px;
+            padding: 5px 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease-in-out;
+            font-size: 14px;
+        }
+        .btn-modern-dropdown:hover, .btn-modern-dropdown:focus {
+            background-color: #f3f6f9;
+            color: #0162e8;
+            outline: none;
+        }
+        .modern-dropdown-menu {
+            border: none;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            padding: 8px 0;
+        }
+        .modern-dropdown-item {
+            padding: 8px 20px;
+            font-size: 13.5px;
+            color: #495057;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        .modern-dropdown-item:hover {
+            background-color: #f8f9fc;
+            color: #0162e8;
+        }
+        .modern-dropdown-item i {
+            margin-left: 10px;
+            font-size: 15px;
+        }
+    </style>
 @endsection
 @section('page-header')
     <!-- breadcrumb -->
@@ -55,24 +96,56 @@
                                     <th class="wd-15p border-bottom-0">الاجمالي</th>
                                     <th class="wd-15p border-bottom-0">الحالة</th>
                                     <th class="wd-15p border-bottom-0">ملاحظات</th>
+                                    <th class="wd-15p border-bottom-0">العمليات</th>
 
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>8512</td>
-                                    <td>2026/8/8</td>
-                                    <td>2026/8/29</td>
-                                    <td>منتج 1</td>
-                                    <td>قسم 1</td>
-                                    <td>100</td>
-                                    <td>10</td>
-                                    <td>10</td>
-                                    <td>1000</td>
-                                    <td><span class="badge badge-success">مدفوع</span></td>
-                                    <td>تم تسديد الفاتورة</td>
-                                </tr>
+                                @forelse($invoices as $invoice)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td><a
+                                                href="{{ route('invoices.details', $invoice->id) }}">{{ $invoice->invoice_number }}</a>
+                                        </td>
+                                        <td>{{ $invoice->invoice_date }}</td>
+                                        <td>{{ $invoice->due_date }}</td>
+                                        <td>{{ $invoice->product }}</td>
+                                        <td>{{ $invoice->section->section_name }}</td>
+                                        <td>{{ $invoice->discount }}</td>
+                                        <td>{{ $invoice->rate_vat }}</td>
+                                        <td>{{ $invoice->value_vat }}</td>
+                                        <td>{{ $invoice->total }}</td>
+                                        <td>
+                                            @if ($invoice->value_status == 1)
+                                                <span class="text-success">{{ $invoice->status }}</span>
+                                            @elseif($invoice->value_status == 2)
+                                                <span class="text-danger">{{ $invoice->status }}</span>
+                                            @else
+                                                <span class="text-warning">{{ $invoice->status }}</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $invoice->note }}</td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button aria-expanded="false" aria-haspopup="true"
+                                                    class="btn-modern-dropdown" data-toggle="dropdown"
+                                                    type="button">
+                                                    العمليات <i class="fas fa-angle-down mr-1"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right modern-dropdown-menu">
+                                                    <a class="dropdown-item modern-dropdown-item"
+                                                        href="{{ route('invoices.edit', $invoice->id) }}">
+                                                        <i class="text-info fas fa-pen"></i>تعديل الفاتورة
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="13" class="text-center">لا توجد فواتير</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>

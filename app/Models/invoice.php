@@ -26,4 +26,9 @@ class invoice extends Model
         'note',
         'user',
     ];
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class, 'section_id');
+    }
 }
