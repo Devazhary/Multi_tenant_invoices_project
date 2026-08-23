@@ -205,7 +205,7 @@
             </div>
         </div>
         <div class="d-flex my-xl-auto right-content">
-            <a class="btn btn-primary" href="{{ route('invoices.index') }}">رجوع</a>
+            <a class="btn btn-primary" href="{{ redirect()->back()->getTargetUrl() }}">رجوع</a>
         </div>
 
     </div>

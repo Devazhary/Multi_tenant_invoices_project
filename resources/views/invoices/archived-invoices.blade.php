@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    قائمة الفواتير
+    قائمة الفواتير المؤرشفة
 @endsection
 @section('css')
     <!-- Internal Data table css -->
@@ -149,7 +149,7 @@
                                                         <i class="text-info fas fa-pen"></i> تعديل الفاتورة
                                                     </a>
                                                     <x-delete-confirm
-                                                        action="{{ route('invoices.destroy', $invoice->id) }}"
+                                                        action="{{ route('archived-invoices.delete', $invoice->id) }}"
                                                         title="تأكيد حذف الفاتورة"
                                                         message="هل أنت متأكد من رغبتك في حذف الفاتورة '{{ $invoice->invoice_number }}'؟">
                                                         <button class="dropdown-item modern-dropdown-item" title="حذف">
@@ -157,15 +157,14 @@
                                                         </button>
                                                     </x-delete-confirm>
                                                     <a class="dropdown-item modern-dropdown-item"
-                                                        href="{{ route('invoices.status_show', $invoice->id) }}">
+                                                        href="{{ route('invoices.edit', $invoice->id) }}">
                                                         <i class="text-info fas fa-credit-card"></i> حالة الدفع
                                                     </a>
                                                     <a class="dropdown-item modern-dropdown-item"
-                                                        href="{{ route('invoices.archive', $invoice->id) }}">
-                                                        <i class="text-info fas fa-archive"></i> ارشيف الفاتورة
+                                                        href="{{ route('invoices.restore', $invoice->id) }}">
+                                                        <i class="text-info fas fa-archive"></i> الغاء ارشيف الفاتورة
                                                     </a>
-                                                    <a class="dropdown-item modern-dropdown-item"
-                                                        href="{{ route('invoices.print', $invoice->id) }}">
+                                                    <a class="dropdown-item modern-dropdown-item" href="#">
                                                         <i class="text-info fas fa-print"></i> طباعة الفاتورة
                                                     </a>
                                                 </div>

@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    قائمة الفواتير
+    قائمة الفواتير المدفوعة جزئياً
 @endsection
 @section('css')
     <!-- Internal Data table css -->
@@ -157,7 +157,7 @@
                                                         </button>
                                                     </x-delete-confirm>
                                                     <a class="dropdown-item modern-dropdown-item"
-                                                        href="{{ route('invoices.status_show', $invoice->id) }}">
+                                                        href="{{ route('invoices.edit', $invoice->id) }}">
                                                         <i class="text-info fas fa-credit-card"></i> حالة الدفع
                                                     </a>
                                                     <a class="dropdown-item modern-dropdown-item"
@@ -165,7 +165,7 @@
                                                         <i class="text-info fas fa-archive"></i> ارشيف الفاتورة
                                                     </a>
                                                     <a class="dropdown-item modern-dropdown-item"
-                                                        href="{{ route('invoices.print', $invoice->id) }}">
+                                                        href="#">
                                                         <i class="text-info fas fa-print"></i> طباعة الفاتورة
                                                     </a>
                                                 </div>

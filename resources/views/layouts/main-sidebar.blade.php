@@ -34,11 +34,12 @@
 					</svg><span class="side-menu__label">الفواتير</span><i class="angle fe fe-chevron-down"></i></a>
 				<ul class="slide-menu">
 					<li><a class="slide-item" href="{{ url('/' . $page = 'invoices') }}">قائمة الفواتير</a></li>
-					<li><a class="slide-item" href="{{ url('/' . $page = 'chart-flot') }}">الفواتير المدفوعة</a></li>
-					<li><a class="slide-item" href="{{ url('/' . $page = 'chart-chartjs') }}">الفواتير الغير مدفوعة</a>
+					<li><a class="slide-item" href="{{ url('/' . $page = 'paid-invoices') }}">الفواتير المدفوعة</a></li>
+					<li><a class="slide-item" href="{{ url('/' . $page = 'unpaid-invoices') }}">الفواتير الغير مدفوعة</a>
 					</li>
-					<li><a class="slide-item" href="{{ url('/' . $page = 'chart-echart') }}">الفواتير المدفوعة جزئيا</a>
+					<li><a class="slide-item" href="{{ url('/' . $page = 'partial-paid-invoices') }}">الفواتير المدفوعة جزئيا</a>
 					</li>
+					<li><a class="slide-item" href="{{ url('/' . $page = 'archived-invoices') }}">قائمة الفواتير المؤرشفة</a></li>
 				</ul>
 			</li>
 			<li class="side-item side-item-category">التقارير</li>

@@ -39,7 +39,7 @@ class InvoicesDetailsController extends Controller
      */
     public function show(string $id)
     {
-        $invoice = invoice::findOrFail($id);
+        $invoice = invoice::withTrashed()->findOrFail($id);
         $invoiceDetails = InvoicesDetails::where('invoice_id', $id)->get();
         $invoiceAttachments = InvoiceAttachments::where('invoice_id', $id)->get();
 
