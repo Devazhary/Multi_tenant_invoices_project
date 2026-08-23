@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Exports\InvoiceExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class InvoiceController extends Controller
 {
@@ -284,5 +286,10 @@ class InvoiceController extends Controller
     {
         $invoice = invoice::where('id', $id)->first();
         return view('invoices.print_invoice', compact('invoice'));
+    }
+
+    public function export()
+    {
+        return Excel::download(new InvoiceExport, 'invoices.xlsx');
     }
 }

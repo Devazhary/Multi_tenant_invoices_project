@@ -7,7 +7,7 @@
 		<a class="desktop-logo logo-dark active" href="{{ url('/' . $page = 'dashboard') }}"><img
 				src="{{URL::asset('assets/img/brand/logo-white.png')}}" class="main-logo dark-theme" alt="logo"></a>
 		<a class="logo-icon mobile-logo icon-light active" href="{{ url('/' . $page = 'dashboard') }}"><img
-				src="{{URL::asset('assets/img/brand/favicon.png')}}" class="logo-icon" alt="logo"></a>
+				src="{{URL::asset('assets/img/brand/invoice-favicon.png')}}" class="logo-icon" alt="logo"></a>
 		<a class="logo-icon mobile-logo icon-dark active" href="{{ url('/' . $page = 'dashboard') }}"><img
 				src="{{URL::asset('assets/img/brand/favicon-white.png')}}" class="logo-icon dark-theme" alt="logo"></a>
 	</div>

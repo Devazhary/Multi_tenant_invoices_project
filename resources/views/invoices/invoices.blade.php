@@ -62,6 +62,34 @@
             margin-left: 10px;
             font-size: 15px;
         }
+
+        .btn-modern-excel {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff !important;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
+            transition: all 0.3s ease;
+            margin-right: 15px;
+            text-decoration: none;
+        }
+
+        .btn-modern-excel:hover, .btn-modern-excel:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            outline: none;
+        }
+        
+        .btn-modern-excel i {
+            font-size: 16px;
+        }
     </style>
 @endsection
 @section('page-header')
@@ -210,4 +238,16 @@
     <script src="{{ URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js') }}"></script>
     <!--Internal  Datatable js -->
     <script src="{{ URL::asset('assets/js/table-data.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                let exportBtn = '<a class="btn-modern-excel" href="{{ route('invoices.export') }}">تصدير اكسيل <i class="fas fa-file-excel"></i></a>';
+                $('#example1_length').append(exportBtn);
+                $('#example1_length').css({
+                    'display': 'flex',
+                    'align-items': 'center'
+                });
+            }, 100);
+        });
+    </script>
 @endsection

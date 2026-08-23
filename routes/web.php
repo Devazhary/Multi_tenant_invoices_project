@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/invoices-restore/{id}', [InvoiceController::class, 'unArchiveInvoice'])->name('invoices.restore');
     Route::delete('/archived-invoices-delete/{id}', [InvoiceController::class, 'deleteArchivedInvoice'])->name('archived-invoices.delete');
     Route::get('/print-invoice/{id}', [InvoiceController::class, 'printInvoice'])->name('invoices.print');
+    Route::get('/invoices-export', [InvoiceController::class, 'export'])->name('invoices.export');
 });
     
 require __DIR__.'/auth.php';
