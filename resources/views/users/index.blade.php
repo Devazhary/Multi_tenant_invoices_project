@@ -128,14 +128,23 @@
             margin-bottom: 0;
         }
 
+        .roles-cell {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-items: center;
+        }
+
         .role-badge {
-            background-color: #f3f6f9;
-            color: #495057;
-            padding: 5px 12px;
-            border-radius: 6px;
+            background-color: #eff6ff;
+            color: #2563eb;
+            padding: 4px 10px;
+            border-radius: 20px;
             font-size: 12px;
-            font-weight: 500;
-            border: 1px solid #e9ecef;
+            font-weight: 600;
+            border: 1px solid #bfdbfe;
+            white-space: nowrap;
+            display: inline-block;
         }
 
         .custom-card {
@@ -177,7 +186,7 @@
             </div>
         </div>
         <div class="d-flex my-xl-auto right-content">
-            <a class="btn ripple btn-primary" href="#">اضافة مستخدم <i class="fa fa-plus"
+            <a class="btn ripple btn-primary" href="{{ route('users.create') }}">اضافة مستخدم <i class="fa fa-plus"
                     aria-hidden="true"></i></a>
         </div>
     </div>
@@ -232,18 +241,20 @@
                                             </td>
                                             <td>{{ $user->created_at ? $user->created_at->format('Y-m-d') : 'N/A' }}</td>
                                             <td>
-                                                @if ($user->status == 'مفعل')
+                                                @if ($user->status == 'active')
                                                     <span class="status-badge status-active">مفعل</span>
                                                 @else
                                                     <span class="status-badge status-inactive">غير مفعل</span>
                                                 @endif
                                             </td>
                                             <td>
-                                                @if(!empty($user->getRoleNames()))
-                                                    @foreach($user->getRoleNames() as $v)
+                                                <div class="roles-cell">
+                                                    @forelse($user->getRoleNames() as $v)
                                                         <span class="role-badge">{{ $v }}</span>
-                                                    @endforeach
-                                                @endif
+                                                    @empty
+                                                        <span class="text-muted" style="font-size:13px;">— لا توجد صلاحية</span>
+                                                    @endforelse
+                                                </div>
                                             </td>
                                             <td class="text-center">
                                                 <div class="dropdown">
@@ -252,12 +263,18 @@
                                                         العمليات <i class="fas fa-angle-down mr-1"></i>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right modern-dropdown-menu">
-                                                        <a class="dropdown-item modern-dropdown-item" href="#">
+                                                        <a class="dropdown-item modern-dropdown-item" href="{{ route('users.edit', $user->id) }}">
                                                             <i class="text-info fas fa-pen"></i> تعديل بيانات
                                                         </a>
-                                                        <a class="dropdown-item modern-dropdown-item text-danger" href="#">
-                                                            <i class="text-danger fas fa-trash"></i> حذف المستخدم
-                                                        </a>
+                                                        <x-delete-confirm
+                                                            :action="route('users.destroy', $user->id)"
+                                                            title="حذف المستخدم"
+                                                            :message="'هل أنت متأكد من حذف المستخدم «' . $user->name . '»؟ لا يمكن التراجع عن هذا الإجراء.'"
+                                                        >
+                                                            <button type="button" class="dropdown-item modern-dropdown-item text-danger" style="border:none;background:transparent;width:100%;text-align:right;">
+                                                                <i class="text-danger fas fa-trash"></i> حذف المستخدم
+                                                            </button>
+                                                        </x-delete-confirm>
                                                     </div>
                                                 </div>
                                             </td>

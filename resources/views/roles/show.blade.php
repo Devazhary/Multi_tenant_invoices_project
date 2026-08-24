@@ -370,12 +370,16 @@
             </div>
         </div>
         <div class="role-action-btns">
-            <a href="#" class="btn-edit-role">
+            <a href="{{ route('roles.edit', isset($role) ? $role->id : 0) }}" class="btn-edit-role">
                 <i class="fas fa-pen"></i> تعديل الدور
             </a>
-            <button class="btn-delete-role">
-                <i class="fas fa-trash"></i> حذف
-            </button>
+            <form action="{{ route('roles.destroy', isset($role) ? $role->id : 0) }}" method="POST" style="display:inline;" onsubmit="return confirm('هل انت متأكد من حذف هذه الصلاحية؟');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn-delete-role">
+                    <i class="fas fa-trash"></i> حذف
+                </button>
+            </form>
         </div>
     </div>
 

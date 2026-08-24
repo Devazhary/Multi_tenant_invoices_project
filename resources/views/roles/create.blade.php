@@ -206,7 +206,7 @@
 @endsection
 
 @section('content')
-    <form action="#" method="POST">
+    <form action="{{ route('roles.store') }}" method="POST">
         @csrf
         
         <!-- Role Name Section -->

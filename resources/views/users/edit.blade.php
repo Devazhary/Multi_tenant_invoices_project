@@ -338,9 +338,18 @@
             <div class="card custom-card">
                 <div class="card-body p-4 p-md-5">
                     <!-- Assuming $user is passed to the view -->
-                    <form action="#" method="POST">
+                    @if ($errors->any())
+                        <div class="alert alert-danger mb-4" style="border-radius:8px;">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <form action="{{ route('users.update', $user->id) }}" method="POST">
                         @csrf
-                        @method('PATCH')
+                        @method('PUT')
                         
                         <!-- Section 1: Basic Info -->
                         <div class="section-title">
@@ -387,7 +396,7 @@
                                 <div class="form-group">
                                     <label>تأكيد كلمة المرور الجديدة</label>
                                     <div class="input-group-modern">
-                                        <input type="password" name="confirm-password" class="form-control" placeholder="أعد إدخال كلمة المرور للمطابقة">
+                                        <input type="password" name="password_confirmation" class="form-control" placeholder="أعد إدخال كلمة المرور للمطابقة">
                                         <i class="fas fa-shield-alt"></i>
                                     </div>
                                 </div>
@@ -405,14 +414,14 @@
                                     <label>حالة الحساب <span class="text-danger">*</span></label>
                                     <div class="status-toggle-group">
                                         @php
-                                            $status = old('status', $user->status ?? 'مفعل');
+                                            $status = old('status', $user->status ?? 'active');
                                         @endphp
-                                        <input type="radio" name="status" id="status-active" value="مفعل" {{ $status == 'مفعل' ? 'checked' : '' }}>
+                                        <input type="radio" name="status" id="status-active" value="active" {{ $status == 'active' ? 'checked' : '' }}>
                                         <label for="status-active" class="status-btn active-btn">
                                             <i class="fas fa-check-circle"></i> مفعل
                                         </label>
                                         
-                                        <input type="radio" name="status" id="status-inactive" value="غير مفعل" {{ $status == 'غير مفعل' ? 'checked' : '' }}>
+                                        <input type="radio" name="status" id="status-inactive" value="inactive" {{ $status == 'inactive' ? 'checked' : '' }}>
                                         <label for="status-inactive" class="status-btn inactive-btn">
                                             <i class="fas fa-times-circle"></i> غير مفعل
                                         </label>
@@ -423,19 +432,11 @@
                                 <div class="form-group">
                                     <label>صلاحيات المستخدم <span class="text-danger">*</span> <small class="text-muted" style="font-size: 11.5px; font-weight: normal;">(يمكنك اختيار أكثر من صلاحية)</small></label>
                                     <select name="roles[]" class="form-control select2" multiple="multiple">
-                                        @if(isset($roles))
-                                            @foreach($roles as $role)
-                                                <option value="{{ $role }}" {{ (isset($userRole) && in_array($role, $userRole)) ? 'selected' : '' }}>
-                                                    {{ $role }}
-                                                </option>
-                                            @endforeach
-                                        @else
-                                            <!-- Dummy options for UI -->
-                                            <option value="مدير" selected>مدير النظام (Admin)</option>
-                                            <option value="مستخدم">مستخدم عادي (User)</option>
-                                            <option value="محاسب">محاسب (Accountant)</option>
-                                            <option value="مراقب">مراقب (Observer)</option>
-                                        @endif
+                                        @foreach($roles as $role)
+                                            <option value="{{ $role->name }}" {{ in_array($role->name, $userRoles) ? 'selected' : '' }}>
+                                                {{ $role->name }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>

@@ -145,5 +145,18 @@ class RolesAndPermissionsSeeder extends Seeder
             'الفواتير المدفوعة جزئيا',
             'قائمة الفواتير المؤرشفة',
         ]);
+
+        // Create Tenant1 User
+        $user = \App\Models\User::firstOrCreate(
+            ['email' => 'tenant1@gmail.com'],
+            [
+                'name' => 'Tenant1',
+                'password' => \Illuminate\Support\Facades\Hash::make('123456789'),
+                'status' => 'active',
+            ]
+        );
+
+        // Assign Admin Role to User
+        $user->assignRole($admin);
     }
 }

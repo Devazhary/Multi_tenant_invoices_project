@@ -219,7 +219,7 @@
             : ['قائمة الفواتير', 'إضافة فاتورة', 'تعديل فاتورة']; // Dummy pre-selected for UI preview
     @endphp
 
-    <form action="#" method="POST">
+    <form action="{{ route('roles.update', isset($role) ? $role->id : 0) }}" method="POST">
         @csrf
         @method('PUT')
 

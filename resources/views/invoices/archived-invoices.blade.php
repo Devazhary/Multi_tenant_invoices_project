@@ -157,14 +157,14 @@
                                                         </button>
                                                     </x-delete-confirm>
                                                     <a class="dropdown-item modern-dropdown-item"
-                                                        href="{{ route('invoices.edit', $invoice->id) }}">
+                                                        href="{{ route('invoices.status_show', $invoice->id) }}">
                                                         <i class="text-info fas fa-credit-card"></i> حالة الدفع
                                                     </a>
                                                     <a class="dropdown-item modern-dropdown-item"
                                                         href="{{ route('invoices.restore', $invoice->id) }}">
                                                         <i class="text-info fas fa-archive"></i> الغاء ارشيف الفاتورة
                                                     </a>
-                                                    <a class="dropdown-item modern-dropdown-item" href="#">
+                                                    <a class="dropdown-item modern-dropdown-item" href="{{ route('invoices.print', $invoice->id) }}">
                                                         <i class="text-info fas fa-print"></i> طباعة الفاتورة
                                                     </a>
                                                 </div>

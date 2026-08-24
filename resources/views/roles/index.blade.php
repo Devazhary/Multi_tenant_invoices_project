@@ -429,10 +429,10 @@
                                     @forelse($displayRoles as $role)
                                         @php 
                                             $rName = is_array($role) ? $role['name'] : $role->name; 
-                                            $rPerms = is_array($role) ? $role['permissions_count'] : (isset($role->permissions) ? count($role->permissions) : 0);
-                                            $rUsers = is_array($role) ? $role['users_count'] : 0;
+                                            $rPerms = is_array($role) ? $role['permissions_count'] : (isset($role->permissions_count) ? $role->permissions_count : (isset($role->permissions) ? count($role->permissions) : 0));
+                                            $rUsers = is_array($role) ? $role['users_count'] : (isset($role->users_count) ? $role->users_count : ($role->users ? $role->users->count() : 0));
                                             $rId = is_array($role) ? $role['id'] : $role->id;
-                                            $rDesc = is_array($role) && isset($role['desc']) ? $role['desc'] : 'وصف الصلاحية غير متاح حالياً';
+                                            $rDesc = is_array($role) && isset($role['desc']) ? $role['desc'] : '';
                                         @endphp
                                         <tr>
                                             <td style="color: #6b7280; font-weight: 500;">#{{ $rId }}</td>
@@ -451,12 +451,16 @@
                                                 </span>
                                             </td>
                                             <td class="text-center">
-                                                <a href="#" class="icon-action edit" title="تعديل">
+                                                <a href="{{ route('roles.edit', $rId) }}" class="icon-action edit" title="تعديل">
                                                     <i class="fas fa-pen"></i>
                                                 </a>
-                                                <a href="#" class="icon-action delete" title="حذف">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
+                                                <form action="{{ route('roles.destroy', $rId) }}" method="POST" style="display:inline;" onsubmit="return confirm('هل انت متأكد من حذف هذه الصلاحية؟');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="icon-action delete" title="حذف" style="border: none;">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @empty
@@ -479,8 +483,8 @@
             @forelse($displayRoles as $role)
                 @php 
                     $rName = is_array($role) ? $role['name'] : $role->name; 
-                    $rPerms = is_array($role) ? $role['permissions_count'] : (isset($role->permissions) ? count($role->permissions) : 0);
-                    $rUsers = is_array($role) ? $role['users_count'] : 0;
+                    $rPerms = is_array($role) ? $role['permissions_count'] : (isset($role->permissions_count) ? $role->permissions_count : (isset($role->permissions) ? count($role->permissions) : 0));
+                    $rUsers = is_array($role) ? $role['users_count'] : (isset($role->users_count) ? $role->users_count : ($role->users ? $role->users->count() : 0));
                     $rId = is_array($role) ? $role['id'] : $role->id;
                     $rDesc = is_array($role) && isset($role['desc']) ? $role['desc'] : 'وصف الصلاحية غير متاح حالياً';
                 @endphp
@@ -493,9 +497,13 @@
                                 <i class="fas fa-ellipsis-v"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-custom">
-                                <a class="dropdown-item" href="#"><i class="fas fa-pen text-primary"></i> تعديل الصلاحية</a>
+                                <a class="dropdown-item" href="{{ route('roles.edit', $rId) }}"><i class="fas fa-pen text-primary"></i> تعديل الصلاحية</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item text-danger" href="#"><i class="fas fa-trash"></i> حذف الصلاحية</a>
+                                <form action="{{ route('roles.destroy', $rId) }}" method="POST" onsubmit="return confirm('هل انت متأكد من حذف هذه الصلاحية؟');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="dropdown-item text-danger" style="background: none; border: none; width: 100%; text-align: right;"><i class="fas fa-trash"></i> حذف الصلاحية</button>
+                                </form>
                             </div>
                         </div>
 
@@ -519,7 +527,7 @@
                             </div>
                         </div>
 
-                        <a href="#" class="btn-view-role">
+                        <a href="{{ route('roles.show', $rId) }}" class="btn-view-role">
                             استعراض الصلاحية <i class="fas fa-arrow-left ml-1" style="font-size: 12px;"></i>
                         </a>
                     </div>

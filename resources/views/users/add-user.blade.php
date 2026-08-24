@@ -337,7 +337,16 @@
         <div class="col-lg-12 col-md-12">
             <div class="card custom-card">
                 <div class="card-body p-4 p-md-5">
-                    <form action="#" method="POST">
+                    @if ($errors->any())
+                        <div class="alert alert-danger mb-4" style="border-radius:8px;">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <form action="{{ route('users.store') }}" method="POST">
                         @csrf
                         
                         <!-- Section 1: Basic Info -->
@@ -385,7 +394,7 @@
                                 <div class="form-group">
                                     <label>تأكيد كلمة المرور <span class="text-danger">*</span></label>
                                     <div class="input-group-modern">
-                                        <input type="password" name="confirm-password" class="form-control" required placeholder="أعد إدخال كلمة المرور للمطابقة">
+                                        <input type="password" name="password_confirmation" class="form-control" required placeholder="أعد إدخال كلمة المرور للمطابقة">
                                         <i class="fas fa-shield-alt"></i>
                                     </div>
                                 </div>
@@ -402,12 +411,12 @@
                                 <div class="form-group">
                                     <label>حالة الحساب <span class="text-danger">*</span></label>
                                     <div class="status-toggle-group">
-                                        <input type="radio" name="status" id="status-active" value="مفعل" checked>
+                                        <input type="radio" name="status" id="status-active" value="active" checked>
                                         <label for="status-active" class="status-btn active-btn">
                                             <i class="fas fa-check-circle"></i> مفعل
                                         </label>
                                         
-                                        <input type="radio" name="status" id="status-inactive" value="غير مفعل">
+                                        <input type="radio" name="status" id="status-inactive" value="inactive">
                                         <label for="status-inactive" class="status-btn inactive-btn">
                                             <i class="fas fa-times-circle"></i> غير مفعل
                                         </label>
@@ -418,17 +427,9 @@
                                 <div class="form-group">
                                     <label>صلاحيات المستخدم <span class="text-danger">*</span> <small class="text-muted" style="font-size: 11.5px; font-weight: normal;">(يمكنك اختيار أكثر من صلاحية)</small></label>
                                     <select name="roles[]" class="form-control select2" multiple="multiple">
-                                        @if(isset($roles))
-                                            @foreach($roles as $role)
-                                                <option value="{{ $role }}">{{ $role }}</option>
-                                            @endforeach
-                                        @else
-                                            <!-- Dummy options for UI -->
-                                            <option value="مدير">مدير النظام (Admin)</option>
-                                            <option value="مستخدم">مستخدم عادي (User)</option>
-                                            <option value="محاسب">محاسب (Accountant)</option>
-                                            <option value="مراقب">مراقب (Observer)</option>
-                                        @endif
+                                        @foreach($roles as $role)
+                                            <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>

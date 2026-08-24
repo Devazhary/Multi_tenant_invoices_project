@@ -7,6 +7,7 @@ use App\Http\Controllers\InvoicesDetailsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -43,6 +44,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/archived-invoices-delete/{id}', [InvoiceController::class, 'deleteArchivedInvoice'])->name('archived-invoices.delete');
     Route::get('/print-invoice/{id}', [InvoiceController::class, 'printInvoice'])->name('invoices.print');
     Route::get('/invoices-export', [InvoiceController::class, 'export'])->name('invoices.export');
+
+    Route::resource('users', UserController::class);
+    Route::resource('roles', \App\Http\Controllers\RoleController::class);
 });
     
 require __DIR__.'/auth.php';
