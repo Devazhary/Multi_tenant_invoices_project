@@ -21,8 +21,10 @@
             </div>
         </div>
         <div class="d-flex my-xl-auto right-content">
+            @can('اضافة منتج')
             <a class="btn ripple btn-primary" data-target="#create_product" data-toggle="modal" href="">اضافة منتج <i
                     class="fa fa-plus" aria-hidden="true"></i></a>
+            @endcan
         </div>
     </div>
     <!-- breadcrumb -->
@@ -58,18 +60,22 @@
                                         <td>{{ $product->section->section_name }}</td>
                                         <td>{{ $product->description }}</td>
                                         <td>
+                                            @can('تعديل منتج')
                                             <a class="btn btn-sm btn-outline-info" href="#" data-target="#edit_product"
                                                 data-toggle="modal" data-id="{{ $product->id }}"
                                                 data-product_name="{{ $product->product_name }}"
                                                 data-description="{{ $product->description }}"
                                                 data-section_id="{{ $product->section_id }}" title="تعديل"><i
                                                     class="fa fa-edit"></i></a>
+                                            @endcan
+                                            @can('حذف منتج')
                                             <x-delete-confirm action="{{ route('products.destroy', $product->id) }}"
                                                 title="تأكيد حذف المنتج"
                                                 message="هل أنت متأكد من رغبتك في حذف المنتج '{{ $product->product_name }}'؟">
                                                 <button class="btn btn-sm btn-outline-danger" title="حذف"><i
                                                         class="fa fa-trash"></i></button>
                                             </x-delete-confirm>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @empty

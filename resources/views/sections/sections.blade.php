@@ -21,8 +21,10 @@
             </div>
         </div>
         <div class="d-flex my-xl-auto right-content">
+            @can('اضافة قسم')
             <a class="btn ripple btn-primary" data-target="#create_section" data-toggle="modal" href="">اضافة قسم <i
                     class="fa fa-plus" aria-hidden="true"></i></a>
+            @endcan
         </div>
     </div>
     <!-- breadcrumb -->
@@ -56,18 +58,22 @@
                                         <td>{{ $section->section_name }}</td>
                                         <td>{{ $section->description }}</td>
                                         <td>
+                                            @can('تعديل قسم')
                                             <a class="btn btn-sm btn-outline-info" href="#"
                                                 data-target="#edit_section" data-toggle="modal"
                                                 data-id="{{ $section->id }}"
                                                 data-section_name="{{ $section->section_name }}"
                                                 data-description="{{ $section->description }}" title="تعديل"><i
                                                     class="fa fa-edit"></i></a>
+                                            @endcan
+                                            @can('حذف قسم')
                                             <x-delete-confirm action="{{ route('sections.destroy', $section->id) }}"
                                                 title="تأكيد حذف القسم"
                                                 message="هل أنت متأكد من رغبتك في حذف القسم '{{ $section->section_name }}'؟">
                                                 <button class="btn btn-sm btn-outline-danger" title="حذف"><i
                                                         class="fa fa-trash"></i></button>
                                             </x-delete-confirm>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @empty
