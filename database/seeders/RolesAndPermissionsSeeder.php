@@ -40,6 +40,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'اضافة منتج',
             'تعديل منتج',
             'حذف منتج',
+            'التقارير',
+            'تقرير الفواتير',
+            'تقرير العملاء',
             'المستخدمين',
             'قائمة المستخدمين',
             'اضافة مستخدم',
@@ -108,6 +111,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'اضافة منتج',
             'تعديل منتج',
             'حذف منتج',
+            'التقارير',
+            'تقرير الفواتير',
+            'تقرير العملاء',
         ]);
 
         $invoice_employee->syncPermissions([
@@ -144,6 +150,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'الفواتير الغير مدفوعة',
             'الفواتير المدفوعة جزئيا',
             'قائمة الفواتير المؤرشفة',
+            'التقارير',
+            'تقرير الفواتير',
         ]);
 
         // Create Tenant1 User

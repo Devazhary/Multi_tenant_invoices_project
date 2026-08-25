@@ -99,8 +99,13 @@ Route::middleware('auth')->group(function () {
     });
 
     // Reports
-    Route::get('/reports/invoices', [InvoiceReportController::class, 'index'])->name('reports.invoices');
-    Route::get('/reports/customers', [CustomerReportController::class, 'index'])->name('reports.customers');
+    Route::group(['middleware' => ['permission:تقرير الفواتير']], function () {
+        Route::get('/reports/invoices', [InvoiceReportController::class, 'index'])->name('reports.invoices');
+    });
+
+    Route::group(['middleware' => ['permission:تقرير العملاء']], function () {
+        Route::get('/reports/customers', [CustomerReportController::class, 'index'])->name('reports.customers');
+    });
 });
     
 require __DIR__.'/auth.php';

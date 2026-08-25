@@ -354,6 +354,34 @@
                 </div>
             </div>
 
+            <!-- Reports Module -->
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="perm-group-card">
+                    <div class="perm-group-header">
+                        <div class="perm-group-icon" style="background: #e0f2fe; color: #0284c7;">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h6 class="perm-group-title">التقارير</h6>
+                    </div>
+                    <div class="perm-group-body">
+                        @php
+                            $reportPerms = ['التقارير', 'تقرير الفواتير', 'تقرير العملاء'];
+                        @endphp
+                        @foreach($reportPerms as $index => $perm)
+                            @php $isChecked = in_array($perm, $currentPermissions); @endphp
+                            <div class="perm-item">
+                                <label class="perm-label {{ $isChecked ? 'active' : '' }}" for="perm_rep_{{ $index }}">{{ $perm }}</label>
+                                <label class="custom-switch">
+                                    <input type="checkbox" name="permission[]" value="{{ $perm }}"
+                                           id="perm_rep_{{ $index }}" {{ $isChecked ? 'checked' : '' }}>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
         </div><!-- End row -->
 
         <!-- Save Button -->
