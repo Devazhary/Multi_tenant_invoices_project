@@ -47,7 +47,9 @@
 				@php
 					$unreadCount = auth('web')->user()->unreadNotifications->count();
 				@endphp
-				<div class="dropdown nav-item main-header-notification">
+				{{-- Notification wrapper - bell is static, only dropdown content is refreshed via AJAX --}}
+				<div id="notification-wrapper" class="dropdown nav-item main-header-notification">
+					{{-- Bell anchor is STATIC - must never be replaced (jQuery click event is bound here) --}}
 					<a class="new nav-link" href="#">
 						<svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none"
 							stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -56,50 +58,13 @@
 							<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
 						</svg>
 						@if($unreadCount > 0)
-							<span class=" pulse"></span>
+							<span class="pulse"></span>
 						@endif
 					</a>
+					{{-- Dropdown menu - inner content refreshed every 4 seconds via AJAX --}}
 					<div class="dropdown-menu">
-						<div class="menu-header-content bg-primary text-right">
-							<div class="d-flex">
-								<h6 class="dropdown-title mb-1 tx-15 text-white font-weight-semibold">الإشعارات</h6>
-								<a href="{{ route('markAllRead') }}"
-									class="badge badge-pill badge-warning mr-auto my-auto float-left">تحديد الكل
-									كمقروء</a>
-							</div>
-							<p class="dropdown-title-text subtext mb-0 text-white op-6 pb-0 tx-12 ">
-								@if($unreadCount > 0)
-									لديك {{ $unreadCount }} إشعار غير مقروء
-								@else
-									لا توجد إشعارات جديدة
-								@endif
-							</p>
-						</div>
-						@php
-							$notifications = auth('web')->user()->notifications;
-						@endphp
-						<div class="main-notification-list Notification-scroll">
-							@foreach ($notifications as $notification)
-								@php $isUnread = is_null($notification->read_at); @endphp
-								<a class="d-flex p-3 border-bottom notification-item {{ $isUnread ? 'unread-notification' : '' }}"
-									href="{{ route('invoices.details', $notification->data['invoice_id']) }}">
-									<div class="mr-3 w-100">
-										<h5 class="notification-label mb-1 {{ $isUnread ? 'text-primary' : '' }}">
-											{{ $notification->data['title'] }}</h5>
-										<div class="notification-subtext text-muted">
-											{{ $notification->created_at->diffForHumans() }}
-										</div>
-									</div>
-									@if($isUnread)
-										<div class="ml-auto mt-2">
-											<span class="unread-indicator"></span>
-										</div>
-									@endif
-								</a>
-							@endforeach
-						</div>
-						<div class="dropdown-footer">
-							<a href="">عرض الكل</a>
+						<div id="notification-dropdown-content">
+							@include('layouts.notification-partial')
 						</div>
 					</div>
 				</div>
@@ -145,3 +110,49 @@
 	</div>
 </div>
 <!-- /main-header -->
+
+<script>
+(function () {
+    'use strict';
+
+    var REFRESH_INTERVAL_MS = 4000;
+    var notificationUrl = '{{ route("notifications.partial") }}';
+    var wrapper = document.getElementById('notification-wrapper');
+
+    function isDropdownOpen() {
+        return wrapper && wrapper.classList.contains('show');
+    }
+
+    function refreshNotifications() {
+        // لو الـ dropdown مفتوح، مش هنعمل refresh عشان محتاجش يتحرك تحت إيد المستخدم
+        if (isDropdownOpen()) return;
+
+        fetch(notificationUrl, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'text/html',
+            },
+            credentials: 'same-origin'
+        })
+        .then(function (response) {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.text();
+        })
+        .then(function (html) {
+            // نحدّث بس المحتوى الداخلي للـ dropdown - مش الـ bell اللي عليه الـ event
+            var dropdownContent = document.getElementById('notification-dropdown-content');
+            if (dropdownContent) {
+                dropdownContent.innerHTML = html;
+            }
+        })
+        .catch(function (error) {
+            console.warn('[Notifications] Refresh failed:', error);
+        });
+    }
+
+    // ابدأ الـ polling بعد تحميل الصفحة
+    setInterval(refreshNotifications, REFRESH_INTERVAL_MS);
+
+})();
+</script>

@@ -111,6 +111,11 @@ Route::middleware('auth')->group(function () {
         auth('web')->user()->unreadNotifications->markAsRead();
         return back();
     })->name('markAllRead');
+
+    // AJAX endpoint to refresh notification dropdown content
+    Route::get('/notifications-partial', function () {
+        return view('layouts.notification-partial');
+    })->name('notifications.partial');
 });
     
 require __DIR__.'/auth.php';
