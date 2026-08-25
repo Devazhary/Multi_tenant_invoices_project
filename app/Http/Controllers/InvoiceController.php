@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\InvoiceExport;
 use App\Http\Requests\InvoiceRequest;
 use App\Models\invoice;
 use App\Models\InvoiceAttachments;
 use App\Models\InvoicesDetails;
 use App\Models\Section;
+use App\Models\User;
+use App\Notifications\CreateInvoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use App\Exports\InvoiceExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Spatie\Permission\Models\Role;
 
 class InvoiceController extends Controller
 {
@@ -21,7 +24,7 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $invoices = invoice::with('section')->get();
+        $invoices = invoice::with('section')->orderBy('created_at', 'desc')->get();
         return view('invoices.invoices', compact('invoices'));
     }
 
@@ -77,6 +80,12 @@ class InvoiceController extends Controller
                     'Created_by' => auth('web')->user()->name,
                     'invoice_id' => $invoice->id,
                 ]);
+            }
+
+            $admins = User::role('مدير النظام')->where('id', '!=' ,auth('web')->user()->id)->get();
+            foreach($admins as $admin)
+            {
+                $admin->notify(new CreateInvoice($invoice));
             }
 
             DB::commit();

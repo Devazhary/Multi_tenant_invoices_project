@@ -106,6 +106,11 @@ Route::middleware('auth')->group(function () {
     Route::group(['middleware' => ['permission:تقرير العملاء']], function () {
         Route::get('/reports/customers', [CustomerReportController::class, 'index'])->name('reports.customers');
     });
+
+    Route::get('/mark-all-read', function () {
+        auth('web')->user()->unreadNotifications->markAsRead();
+        return back();
+    })->name('markAllRead');
 });
     
 require __DIR__.'/auth.php';
