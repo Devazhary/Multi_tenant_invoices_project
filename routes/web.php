@@ -7,6 +7,7 @@ use App\Http\Controllers\InvoicesDetailsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\InvoiceReportController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -95,6 +96,9 @@ Route::middleware('auth')->group(function () {
     Route::group(['middleware' => ['permission:صلاحيات المستخدمين']], function () {
         Route::resource('roles', \App\Http\Controllers\RoleController::class);
     });
+
+    // Reports
+    Route::get('/reports/invoices', [InvoiceReportController::class, 'index'])->name('reports.invoices');
 });
     
 require __DIR__.'/auth.php';

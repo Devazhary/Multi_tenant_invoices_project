@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    لوحة التحكم - برنامج الفواتير
+    لوحة التحكم - InvoicePro 
 @endsection
 @section('css')
     <!--  Owl-carousel css-->
